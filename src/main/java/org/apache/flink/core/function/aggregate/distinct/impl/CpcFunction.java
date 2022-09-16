@@ -1,4 +1,4 @@
-package org.apache.flink.core.function.aggregate.impl;
+package org.apache.flink.core.function.aggregate.distinct.impl;
 
 import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.flink.annotation.Internal;

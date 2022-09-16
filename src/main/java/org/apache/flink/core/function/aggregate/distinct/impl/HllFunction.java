@@ -1,10 +1,12 @@
-package org.apache.flink.core.function.aggregate.impl;
+package org.apache.flink.core.function.aggregate.distinct.impl;
 
 import org.apache.datasketches.hll.HllSketch;
+import org.apache.flink.annotation.Internal;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 
+@Internal
 public abstract class HllFunction implements Serializable {
 
     private static final long serialVersionUID = 1L;

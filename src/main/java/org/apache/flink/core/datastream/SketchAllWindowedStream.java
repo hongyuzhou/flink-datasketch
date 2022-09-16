@@ -5,11 +5,10 @@ import org.apache.flink.annotation.Public;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.core.function.aggregate.impl.CpcAccumulator;
-import org.apache.flink.core.function.aggregate.impl.HllAccumulator;
+import org.apache.flink.core.function.aggregate.distinct.impl.CpcAccumulator;
+import org.apache.flink.core.function.aggregate.distinct.impl.HllAccumulator;
 import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 
 @Public

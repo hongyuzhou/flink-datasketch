@@ -1,33 +1,25 @@
-package org.apache.flink.core.function.aggregate.impl;
+package org.apache.flink.core.function.aggregate.distinct.impl;
 
 
 import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.datasketches.cpc.CpcUnion;
-import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.core.function.aggregate.SketchAggregateFunction;
+import org.apache.flink.core.function.aggregate.distinct.CpcAggregateFunction;
 import org.apache.flink.streaming.util.typeutils.FieldAccessor;
 import org.apache.flink.streaming.util.typeutils.FieldAccessorFactory;
 
-import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
-import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
-
-@Internal
-public class CpcAccumulator<IN> extends SketchAggregateFunction<IN, CpcSketch, Double> {
+public class CpcAccumulator<IN> extends CpcAggregateFunction<IN, Double> {
 
     private static final long serialVersionUID = 1L;
 
-    private final int lgK;
-    private final long seed;
     private final FieldAccessor<IN, Object> fieldAccessor;
     private final CpcFunction updater;
 
     public CpcAccumulator(int pos, TypeInformation<IN> typeInfo, ExecutionConfig config) {
+        super();
         fieldAccessor = FieldAccessorFactory.getAccessor(typeInfo, pos, config);
         updater = CpcFunction.getForClass(fieldAccessor.getFieldType().getTypeClass());
-        this.lgK = DEFAULT_LG_K;
-        this.seed = DEFAULT_UPDATE_SEED;
     }
 
     public CpcAccumulator(
@@ -36,10 +28,9 @@ public class CpcAccumulator<IN> extends SketchAggregateFunction<IN, CpcSketch, D
             ExecutionConfig config,
             int lgK,
             long seed) {
+        super(lgK, seed);
         fieldAccessor = FieldAccessorFactory.getAccessor(typeInfo, pos, config);
         updater = CpcFunction.getForClass(fieldAccessor.getFieldType().getTypeClass());
-        this.lgK = lgK;
-        this.seed = seed;
     }
 
     @Override
