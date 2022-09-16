@@ -1,4 +1,4 @@
-package org.apache.flink.function.process;
+package org.apache.flink.core.function.process;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Counter;

@@ -9,6 +9,7 @@ import org.apache.flink.benchmark.data.Tuple3SourceGenerator;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.benchmark.operator.aggregate.CpcAggregate;
 import org.apache.flink.benchmark.operator.aggregate.HllAggregate;
+import org.apache.flink.core.datastream.SketchAllWindowedStream;
 import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -41,20 +42,24 @@ public class AllWindowSketchBenchMark {
                         3500000L,
                         1000000000L))
                 // 产出10亿行，每秒350万行
-                .returns(new TypeHint<Tuple3<String, Long, String>>() {})
+                .returns(new TypeHint<Tuple3<String, Long, String>>() {
+                })
                 .name("source");
 
         AllWindowedStream<Tuple3<String, Long, String>, TimeWindow> windowAll = source
                 .windowAll(TumblingProcessingTimeWindows.of(Time.seconds(30)));
 
+        SketchAllWindowedStream<Tuple3<String, Long, String>, TimeWindow> sketchAllWindowedStream =
+                new SketchAllWindowedStream<>(windowAll, env.getConfig());
+
         DataStream<Double> estimate;
 
         if ("cpc".equals(params.get("sketch", "hll"))) {
-            estimate = windowAll
+            estimate = sketchAllWindowedStream
                     //.cpc(2).name("cpc");
                     .aggregate(new CpcAggregate()).name("cpc");
         } else {
-            estimate = windowAll
+            estimate = sketchAllWindowedStream
                     //.hll(2).name("hll");
                     .aggregate(new HllAggregate()).name("hll");
         }

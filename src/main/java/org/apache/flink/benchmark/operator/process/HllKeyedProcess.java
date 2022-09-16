@@ -2,12 +2,9 @@ package org.apache.flink.benchmark.operator.process;
 
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.TgtHllType;
-import org.apache.flink.HllTypeSerializer;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.function.process.distinct.HllKeyedProcessFunction;
+import org.apache.flink.core.function.process.distinct.HllKeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<String, Long, String>, Double> {

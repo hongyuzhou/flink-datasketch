@@ -2,7 +2,7 @@ package org.apache.flink.benchmark.operator.aggregate;
 
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.function.aggregate.SketchAggregateFunction;
+import org.apache.flink.core.function.aggregate.SketchAggregateFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

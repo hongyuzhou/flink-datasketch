@@ -4,7 +4,7 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.benchmark.data.Tuple3SourceGenerator;
-import org.apache.flink.function.SketchWindowedStream;
+import org.apache.flink.core.datastream.SketchWindowedStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

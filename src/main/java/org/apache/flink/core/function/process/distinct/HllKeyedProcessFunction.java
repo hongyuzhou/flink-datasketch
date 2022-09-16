@@ -1,14 +1,14 @@
-package org.apache.flink.function.process.distinct;
+package org.apache.flink.core.function.process.distinct;
 
 import org.apache.datasketches.SketchesArgumentException;
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.TgtHllType;
-import org.apache.flink.HllTypeSerializer;
+import org.apache.flink.core.serializer.HllTypeSerializer;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.function.process.SketchKeyedProcessFunction;
+import org.apache.flink.core.function.process.SketchKeyedProcessFunction;
 
 import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
 

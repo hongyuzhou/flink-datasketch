@@ -1,16 +1,14 @@
-package org.apache.flink.function;
+package org.apache.flink.core.datastream;
 
 import org.apache.datasketches.hll.TgtHllType;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.function.aggregate.impl.CpcAccumulator;
-import org.apache.flink.function.aggregate.impl.HllAccumulator;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
+import org.apache.flink.core.function.aggregate.impl.CpcAccumulator;
+import org.apache.flink.core.function.aggregate.impl.HllAccumulator;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
-import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 
 @Public

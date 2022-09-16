@@ -1,4 +1,4 @@
-package org.apache.flink;
+package org.apache.flink.core.serializer;
 
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.flink.api.common.typeutils.SimpleTypeSerializerSnapshot;

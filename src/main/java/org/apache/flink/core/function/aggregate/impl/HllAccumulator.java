@@ -1,4 +1,4 @@
-package org.apache.flink.function.aggregate.impl;
+package org.apache.flink.core.function.aggregate.impl;
 
 
 import org.apache.datasketches.SketchesArgumentException;
@@ -7,7 +7,7 @@ import org.apache.datasketches.hll.TgtHllType;
 import org.apache.datasketches.hll.Union;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.function.aggregate.SketchAggregateFunction;
+import org.apache.flink.core.function.aggregate.SketchAggregateFunction;
 import org.apache.flink.streaming.util.typeutils.FieldAccessor;
 import org.apache.flink.streaming.util.typeutils.FieldAccessorFactory;
 
