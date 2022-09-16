@@ -6,7 +6,6 @@ import org.apache.flink.streaming.api.functions.aggregation.SumAggregator;
 
 import java.io.Serializable;
 
-/** Internal function for summing up contents of fields. This is used with {@link SumAggregator}. */
 @Internal
 public abstract class CpcFunction implements Serializable {
 
@@ -32,7 +31,7 @@ public abstract class CpcFunction implements Serializable {
             return new ByteArrayCpc();
         } else {
             throw new RuntimeException(
-                    "DataStream cannot be cpcSketch because the class "
+                    "DataStream cannot be CpcSketch because the class "
                             + clazz.getSimpleName()
                             + " does not support the + operator.");
         }

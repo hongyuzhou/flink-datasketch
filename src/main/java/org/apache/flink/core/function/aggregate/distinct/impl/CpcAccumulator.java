@@ -14,6 +14,7 @@ public class CpcAccumulator<IN> extends CpcAggregateFunction<IN, Double> {
     private static final long serialVersionUID = 1L;
 
     private final FieldAccessor<IN, Object> fieldAccessor;
+
     private final CpcFunction updater;
 
     public CpcAccumulator(int pos, TypeInformation<IN> typeInfo, ExecutionConfig config) {

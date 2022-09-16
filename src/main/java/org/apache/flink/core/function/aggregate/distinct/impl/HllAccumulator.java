@@ -15,10 +15,8 @@ public class HllAccumulator<IN> extends HllAggregateFunction<IN, Double> {
     private static final long serialVersionUID = 1L;
 
     private final FieldAccessor<IN, Object> fieldAccessor;
-    private final HllFunction updater;
 
-    final int MIN_LOG_K = 4;
-    final int MAX_LOG_K = 21;
+    private final HllFunction updater;
 
     public HllAccumulator(int pos, TypeInformation<IN> typeInfo, ExecutionConfig config) {
         super();
