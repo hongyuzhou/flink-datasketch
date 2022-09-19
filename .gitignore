@@ -15,6 +15,7 @@ tmp
 *.log
 .DS_Store
 atlassian-ide-plugin.xml
+dependency-reduced-pom.xml
 out/
 *.ipr
 *.iws

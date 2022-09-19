@@ -7,6 +7,7 @@ import org.apache.flink.benchmark.data.Tuple3SourceGenerator;
 import org.apache.flink.benchmark.operator.process.CpcKeyedProcess;
 import org.apache.flink.benchmark.operator.process.HllKeyedProcess;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -23,18 +24,20 @@ public class SketchBenchMark {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment
-                .createLocalEnvironmentWithWebUI(new Configuration());
+                .getExecutionEnvironment();
+                //.createLocalEnvironmentWithWebUI(new Configuration());
 
         env.setParallelism(4);
+        env.enableCheckpointing(5000, CheckpointingMode.EXACTLY_ONCE);
 
-        //env.enableCheckpointing(1000, CheckpointingMode.EXACTLY_ONCE);
+        long rowsPerSecond = Long.parseLong(params.get("rowsPerSecond","25000"));
+        long numberOfRows = Long.parseLong(params.get("numberOfRows","1000000000"));
 
         DataStream<Tuple3<String, Long, String>> source = env
                 .addSource(new DataGeneratorSource<>(
                         new Tuple3SourceGenerator(),
-                        5000000L,
-                        1000000000L))
-                // 产出10亿行，每秒500万行
+                        rowsPerSecond,
+                        numberOfRows))
                 .returns(new TypeHint<Tuple3<String, Long, String>>() {})
                 .name("source");
 
