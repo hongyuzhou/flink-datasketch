@@ -53,9 +53,9 @@ public class HllAccumulator<IN> extends HllAggregateFunction<IN, Double> {
 
     @Override
     public HllSketch merge(HllSketch a, HllSketch b) {
-        Union union = new Union();
+        Union union = new Union(lgConfigK);
         union.update(a);
         union.update(b);
-        return union.getResult();
+        return union.getResult(tgtHllType);
     }
 }

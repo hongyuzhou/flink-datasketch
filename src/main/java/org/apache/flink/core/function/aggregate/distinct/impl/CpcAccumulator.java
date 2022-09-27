@@ -52,7 +52,7 @@ public class CpcAccumulator<IN> extends CpcAggregateFunction<IN, Double> {
 
     @Override
     public CpcSketch merge(CpcSketch a, CpcSketch b) {
-        CpcUnion union = new CpcUnion();
+        CpcUnion union = new CpcUnion(lgK);
         union.update(a);
         union.update(b);
         return union.getResult();

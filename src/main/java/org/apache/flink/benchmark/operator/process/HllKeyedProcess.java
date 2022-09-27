@@ -28,7 +28,7 @@ public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<Stri
     public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<Double> out) throws Exception {
         HllSketch sketch = hll.value();
 
-        if (hll.value() == null) {
+        if (sketch == null) {
             sketch = new HllSketch(lgConfigK, tgtHllType);
         }
 

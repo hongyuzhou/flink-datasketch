@@ -27,7 +27,7 @@ public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<Stri
     public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<Double> out) throws Exception {
         CpcSketch sketch = cpc.value();
 
-        if (cpc.value() == null) {
+        if (sketch == null) {
             sketch = new CpcSketch(lgK, seed);
         }
 
