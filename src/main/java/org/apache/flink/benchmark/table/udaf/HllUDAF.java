@@ -30,7 +30,6 @@ public class HllUDAF extends HllUDAFunction<Double> {
 
     public void accumulate(HllSketch acc,
                            @DataTypeHint(value = "RAW", bridgedTo = Long.class) Long iValue) {
-        System.out.println("这个");
         acc.update(iValue);
     }
 
