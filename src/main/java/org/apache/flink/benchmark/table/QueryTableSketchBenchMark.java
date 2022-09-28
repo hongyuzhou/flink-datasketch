@@ -2,6 +2,7 @@ package org.apache.flink.benchmark.table;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.benchmark.table.udaf.CpcUDAF;
 import org.apache.flink.benchmark.table.udaf.HllUDAF;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -37,10 +38,8 @@ public class QueryTableSketchBenchMark {
         TableEnvironment tEnv = setUpEnv(dataPath);
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            if (i == 3) {
-                runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
-            }
+        for (int i = 0; i < 6; i++) {
+            runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
         }
 
     }
@@ -103,6 +102,7 @@ public class QueryTableSketchBenchMark {
         tEnv.executeSql(String.format(ddl, dataPath));
         //tEnv.executeSql("select * from store_sales limit 10").print();
         tEnv.createTemporarySystemFunction("hll", new HllUDAF());
+        tEnv.createTemporarySystemFunction("cpc", new CpcUDAF());
     }
 
     private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {

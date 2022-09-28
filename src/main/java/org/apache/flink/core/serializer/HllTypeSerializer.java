@@ -84,9 +84,7 @@ public class HllTypeSerializer extends TypeSerializerSingleton<HllSketch> {
 
     public static final class HllTypeSerializerSnapshot extends SimpleTypeSerializerSnapshot<HllSketch> {
         public HllTypeSerializerSnapshot() {
-            super(() -> {
-                return HllTypeSerializer.INSTANCE;
-            });
+            super(() -> HllTypeSerializer.INSTANCE);
         }
     }
 
