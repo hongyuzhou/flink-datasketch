@@ -38,7 +38,9 @@ public class QueryTableSketchBenchMark {
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+            if (i == 3) {
+                runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+            }
         }
 
     }
@@ -66,29 +68,29 @@ public class QueryTableSketchBenchMark {
     private static void setUpTables(TableEnvironment tEnv, String dataPath) {
         String ddl = "" +
                 "CREATE TEMPORARY TABLE store_sales (" +
-                "   ss_sold_date_sk BIGINT NOT NULL," +
-                "   ss_sold_time_sk BIGINT NOT NULL," +
-                "   ss_item_sk BIGINT NOT NULL," +
-                "   ss_customer_sk BIGINT NULL," +
-                "   ss_cdemo_sk BIGINT NULL," +
-                "   ss_hdemo_sk BIGINT NULL," +
-                "   ss_addr_sk BIGINT NULL," +
-                "   ss_store_sk BIGINT NULL," +
-                "   ss_promo_sk BIGINT NULL," +
-                "   ss_ticket_number BIGINT NULL," +
-                "   ss_quantity BIGINT NULL," +
-                "   ss_wholesale_cost DECIMAL(7,2) NULL," +
-                "   ss_list_price DECIMAL(7,2) NULL," +
-                "   ss_sales_price DECIMAL(7,2) NULL," +
-                "   ss_ext_discount_amt DECIMAL(7,2) NULL," +
-                "   ss_ext_sales_price DECIMAL(7,2) NULL," +
-                "   ss_ext_wholesale_cost DECIMAL(7,2) NULL," +
-                "   ss_ext_list_price DECIMAL(7,2) NULL," +
-                "   ss_ext_tax DECIMAL(7,2) NULL," +
-                "   ss_coupon_amt DECIMAL(7,2) NULL," +
-                "   ss_net_paid DECIMAL(7,2) NULL," +
-                "   ss_net_paid_inc_tax DECIMAL(7,2) NULL," +
-                "   ss_net_profit DECIMAL(7,2) NULL" +
+                "   ss_sold_date_sk BIGINT," +
+                "   ss_sold_time_sk BIGINT," +
+                "   ss_item_sk BIGINT," +
+                "   ss_customer_sk BIGINT," +
+                "   ss_cdemo_sk BIGINT," +
+                "   ss_hdemo_sk BIGINT," +
+                "   ss_addr_sk BIGINT," +
+                "   ss_store_sk BIGINT," +
+                "   ss_promo_sk BIGINT," +
+                "   ss_ticket_number BIGINT," +
+                "   ss_quantity BIGINT," +
+                "   ss_wholesale_cost DECIMAL(7,2)," +
+                "   ss_list_price DECIMAL(7,2)," +
+                "   ss_sales_price DECIMAL(7,2)," +
+                "   ss_ext_discount_amt DECIMAL(7,2)," +
+                "   ss_ext_sales_price DECIMAL(7,2)," +
+                "   ss_ext_wholesale_cost DECIMAL(7,2)," +
+                "   ss_ext_list_price DECIMAL(7,2)," +
+                "   ss_ext_tax DECIMAL(7,2)," +
+                "   ss_coupon_amt DECIMAL(7,2)," +
+                "   ss_net_paid DECIMAL(7,2)," +
+                "   ss_net_paid_inc_tax DECIMAL(7,2)," +
+                "   ss_net_profit DECIMAL(7,2)" +
                 ") " +
                 "WITH (" +
                 "   'connector' = 'filesystem', \n" +
@@ -134,7 +136,7 @@ public class QueryTableSketchBenchMark {
         try {
             return outStream.toString("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            LOG.error("SQL 2 String Error", e);
+            LOG.error("SQL to String Error", e);
         }
         return "";
     }

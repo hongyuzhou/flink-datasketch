@@ -5,9 +5,7 @@ import org.apache.datasketches.hll.TgtHllType;
 import org.apache.datasketches.hll.Union;
 import org.apache.datasketches.memory.Memory;
 import org.apache.flink.core.function.table.distinct.HllUDAFunction;
-import org.apache.flink.table.annotation.DataTypeHint;
 
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
@@ -28,23 +26,15 @@ public class HllUDAF extends HllUDAFunction<Double> {
         return super.createAccumulator();
     }
 
-    public void accumulate(HllSketch acc,
-                           @DataTypeHint(value = "RAW", bridgedTo = Long.class) Long iValue) {
+    public void accumulate(HllSketch acc, Long iValue) {
         acc.update(iValue);
     }
 
-    public void accumulate(HllSketch acc,
-                           @DataTypeHint(value = "RAW", bridgedTo = String.class) String iValue) {
+    public void accumulate(HllSketch acc, String iValue) {
         acc.update(iValue);
     }
 
-    public void accumulate(HllSketch acc,
-                           @DataTypeHint(value = "RAW", bridgedTo = Double.class) Double iValue) {
-        acc.update(iValue);
-    }
-
-    public void accumulate(HllSketch acc,
-                           @DataTypeHint(value = "RAW", bridgedTo = ByteBuffer.class) ByteBuffer iValue) {
+    public void accumulate(HllSketch acc, Double iValue) {
         acc.update(iValue);
     }
 
@@ -54,7 +44,7 @@ public class HllUDAF extends HllUDAFunction<Double> {
     }
 
 
-    // TODO； ACC Merge
+    // TODO: ACC Merge
 //    public void merge(HllSketch acc, Iterable<HllSketch> it) {
 //        System.out.println(Thread.currentThread() + " 执行merge");
 //        Union union = new Union(lgConfigK);
