@@ -126,6 +126,13 @@
         </dependency>
 
         <!-- Add connector dependencies here.-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-csv</artifactId>
+            <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
+        </dependency>
+
 
         <!-- Example:
 

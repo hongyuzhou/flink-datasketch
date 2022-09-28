@@ -1,6 +1,7 @@
 package org.apache.flink.benchmark.table;
 
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.benchmark.table.udaf.HllUDAF;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -23,13 +24,26 @@ public class QueryTableSketchBenchMark {
     private static final Logger LOG = LoggerFactory.getLogger(QueryTableSketchBenchMark.class);
 
     public static void main(String[] args) throws Exception {
-        TableEnvironment tEnv = setUpEnv();
+
+        final ParameterTool params = ParameterTool.fromArgs(args);
+
+        if (!params.has("dataPath")) {
+            throw new IllegalArgumentException("Must Use --dataPath to specify data path.");
+        }
+        String dataPath = params.get("dataPath");
+
+        int loopNum = params.getInt("loopNum", 3);
+
+        TableEnvironment tEnv = setUpEnv(dataPath);
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
-        runQuery(tEnv, "X", 20, bestArray);
+        for (int i = 0; i < 4; i++) {
+            runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+        }
+
     }
 
-    private static TableEnvironment setUpEnv() {
+    private static TableEnvironment setUpEnv(String dataPath) {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inBatchMode().build();
         TableEnvironment tEnv = TableEnvironment.create(settings);
         tEnv.getConfig().getConfiguration().setBoolean(
@@ -45,16 +59,52 @@ public class QueryTableSketchBenchMark {
                 ExecutionConfigOptions.TABLE_EXEC_SHUFFLE_MODE, ShuffleMode.BATCH.toString()
         );
 
-        setUpTables(tEnv);
+        setUpTables(tEnv, dataPath);
         return tEnv;
     }
 
-    private static void setUpTables(TableEnvironment tEnv) {
-
+    private static void setUpTables(TableEnvironment tEnv, String dataPath) {
+        String ddl = "" +
+                "CREATE TEMPORARY TABLE store_sales (" +
+                "   ss_sold_date_sk BIGINT NOT NULL," +
+                "   ss_sold_time_sk BIGINT NOT NULL," +
+                "   ss_item_sk BIGINT NOT NULL," +
+                "   ss_customer_sk BIGINT NULL," +
+                "   ss_cdemo_sk BIGINT NULL," +
+                "   ss_hdemo_sk BIGINT NULL," +
+                "   ss_addr_sk BIGINT NULL," +
+                "   ss_store_sk BIGINT NULL," +
+                "   ss_promo_sk BIGINT NULL," +
+                "   ss_ticket_number BIGINT NULL," +
+                "   ss_quantity BIGINT NULL," +
+                "   ss_wholesale_cost DECIMAL(7,2) NULL," +
+                "   ss_list_price DECIMAL(7,2) NULL," +
+                "   ss_sales_price DECIMAL(7,2) NULL," +
+                "   ss_ext_discount_amt DECIMAL(7,2) NULL," +
+                "   ss_ext_sales_price DECIMAL(7,2) NULL," +
+                "   ss_ext_wholesale_cost DECIMAL(7,2) NULL," +
+                "   ss_ext_list_price DECIMAL(7,2) NULL," +
+                "   ss_ext_tax DECIMAL(7,2) NULL," +
+                "   ss_coupon_amt DECIMAL(7,2) NULL," +
+                "   ss_net_paid DECIMAL(7,2) NULL," +
+                "   ss_net_paid_inc_tax DECIMAL(7,2) NULL," +
+                "   ss_net_profit DECIMAL(7,2) NULL" +
+                ") " +
+                "WITH (" +
+                "   'connector' = 'filesystem', \n" +
+                "   'path' = 'file://%s', \n" +
+                "   'format' = 'csv', \n" +
+                "   'csv.field-delimiter' = '|', \n" +
+                "   'csv.null-literal' = 'true', \n" +
+                "   'csv.ignore-parse-errors' = 'true'" +
+                ")";
+        tEnv.executeSql(String.format(ddl, dataPath));
+        //tEnv.executeSql("select * from store_sales limit 10").print();
+        tEnv.createTemporarySystemFunction("hll", new HllUDAF());
     }
 
     private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
-        String queryString = fileToString(new File(""));
+        String queryString = fileToString(new File("src/main/resources/table/queries/" + queryName));
         TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
         benchMark.run(bestArray);
     }
@@ -88,55 +138,4 @@ public class QueryTableSketchBenchMark {
         }
         return "";
     }
-
-
-//    public static void main(String[] args) {
-//        EnvironmentSettings bbSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inBatchMode().build();
-//        TableEnvironment tEnv = TableEnvironment.create(bbSettings);
-//
-//
-//        final Table rawCustomers =
-//                tEnv.fromValues(
-//                        Row.of(
-//                                "A",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()),
-//                        Row.of(
-//                                "B",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()),
-//                        Row.of(
-//                                "C",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()),
-//                        Row.of(
-//                                "D",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()),
-//                        Row.of(
-//                                "A",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()),
-//                        Row.of(
-//                                "A",
-//                                System.currentTimeMillis(),
-//                                new AbstractID().toHexString()))
-//                        .as("city", "event_time", "uniq_key");
-//
-//        tEnv.createTemporarySystemFunction("hll", new HllUDAF());
-//
-////        Table estimate = rawCustomers
-////                .groupBy($("city"))
-////                .select($("city"), call("hll", $("uniq_key")).as("estimate"));
-//
-//
-//        tEnv.createTemporaryView("rawCustomers", rawCustomers);
-//        Table estimate = tEnv.sqlQuery(
-//                "SELECT city, hll(uniq_key) as estimate FROM rawCustomers GROUP BY city"
-//        );
-//
-//        //estimate.execute().collect().forEachRemaining(res::add);
-//
-//        //res.execute().print();
-//    }
 }

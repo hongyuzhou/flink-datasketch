@@ -59,7 +59,7 @@ public class TableSketchBenchMark {
         LOG.info(" end execute.");
 
         long totalTime = System.currentTimeMillis() - start;
-        printRow(res);
+        //printRow(res);
 
         return new Result(totalTime);
     }
