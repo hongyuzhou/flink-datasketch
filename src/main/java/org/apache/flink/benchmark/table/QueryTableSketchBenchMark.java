@@ -6,12 +6,9 @@ import org.apache.flink.benchmark.table.udaf.CpcUDAF;
 import org.apache.flink.benchmark.table.udaf.HllUDAF;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
 import org.apache.flink.table.api.EnvironmentSettings;
-import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.config.ExecutionConfigOptions;
 import org.apache.flink.table.api.config.OptimizerConfigOptions;
-import org.apache.flink.types.Row;
-import org.apache.flink.util.AbstractID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
