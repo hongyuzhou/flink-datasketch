@@ -35,7 +35,7 @@ public class QueryTableSketchBenchMark {
         TableEnvironment tEnv = setUpEnv(dataPath);
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
         }
 

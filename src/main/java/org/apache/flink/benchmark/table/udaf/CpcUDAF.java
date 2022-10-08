@@ -22,15 +22,21 @@ public class CpcUDAF extends CpcUDAFunction<Double> {
     }
 
     public void accumulate(CpcSketch acc, Long iValue) {
-        acc.update(iValue);
+        if (iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     public void accumulate(CpcSketch acc, String iValue) {
-        acc.update(iValue);
+        if (iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     public void accumulate(CpcSketch acc, Double iValue) {
-        acc.update(iValue);
+        if (iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     @Override

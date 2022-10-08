@@ -27,15 +27,21 @@ public class HllUDAF extends HllUDAFunction<Double> {
     }
 
     public void accumulate(HllSketch acc, Long iValue) {
-        acc.update(iValue);
+        if (iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     public void accumulate(HllSketch acc, String iValue) {
-        acc.update(iValue);
+        if(iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     public void accumulate(HllSketch acc, Double iValue) {
-        acc.update(iValue);
+        if(iValue != null) {
+            acc.update(iValue);
+        }
     }
 
     @Override
