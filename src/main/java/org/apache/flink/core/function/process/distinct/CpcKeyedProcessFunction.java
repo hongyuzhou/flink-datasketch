@@ -9,7 +9,7 @@ import org.apache.flink.core.function.process.SketchKeyedProcessFunction;
 import org.apache.flink.core.serializer.CpcTypeSerializer;
 
 import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
-import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
+import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
 
 public abstract class CpcKeyedProcessFunction<K, I, O> extends SketchKeyedProcessFunction<K, I, O> {
 

@@ -53,13 +53,11 @@ public class TableSketchBenchMark {
 
         LOG.info(" begin execute.");
 
-        List<Row> res = new ArrayList<>();
-        table.execute().collect().forEachRemaining(res::add);
+        table.execute().print();
 
         LOG.info(" end execute.");
 
         long totalTime = System.currentTimeMillis() - start;
-        printRow(res);
 
         return new Result(totalTime);
     }

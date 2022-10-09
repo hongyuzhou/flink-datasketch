@@ -44,11 +44,6 @@ public class CpcUDAF extends CpcUDAFunction<Double> {
         return accumulator.getEstimate();
     }
 
-
-    //TODO: ACC Merge
-//    public void merge(HllSketch acc, Iterable<HllSketch> it) {
-//    }
-
     public void resetAccumulator(CpcSketch acc) {
         super.resetAccumulator(acc);
     }

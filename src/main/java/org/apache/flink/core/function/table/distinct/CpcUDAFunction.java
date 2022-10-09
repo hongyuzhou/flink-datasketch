@@ -8,7 +8,7 @@ import org.apache.flink.table.annotation.FunctionHint;
 import org.apache.flink.table.functions.FunctionContext;
 
 import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
-import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
+import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
 
 @FunctionHint(
         accumulator = @DataTypeHint(value = "RAW", bridgedTo = CpcSketch.class)
@@ -18,6 +18,7 @@ public abstract class CpcUDAFunction<T> extends SketchUDAFunction<T, CpcSketch> 
     private static final long serialVersionUID = 1L;
 
     protected int lgK;
+
     protected long seed;
 
     public CpcUDAFunction() {
