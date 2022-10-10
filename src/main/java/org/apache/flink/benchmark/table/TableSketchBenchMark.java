@@ -3,6 +3,7 @@ package org.apache.flink.benchmark.table;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.types.Row;
@@ -34,12 +35,12 @@ public class TableSketchBenchMark {
         List<Result> results = new ArrayList<>();
         for (int i = 0; i < loopNum; i++) {
             System.err.printf("--------------- Running %s %s/%s ---------------%n", name, (i + 1), loopNum);
-            results.add(runInternal());
+            results.add(runInternal(i));
         }
         printResults(results, bestArray);
     }
 
-    private Result runInternal() throws Exception {
+    private Result runInternal(int loop) throws Exception {
         System.gc();
 
         LOG.info("begin register tables.");
@@ -48,6 +49,7 @@ public class TableSketchBenchMark {
         LOG.info(" begin optimize.");
 
         tEnv.getConfig().setLocalTimeZone(ZoneId.of("UTC"));
+        tEnv.getConfig().getConfiguration().setString(PipelineOptions.NAME, name + "-" + loop + "/" + loopNum);
 
         Table table = tEnv.sqlQuery(sqlQuery);
 
