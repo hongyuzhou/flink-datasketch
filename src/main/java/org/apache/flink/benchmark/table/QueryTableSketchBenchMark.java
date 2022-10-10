@@ -60,6 +60,9 @@ public class QueryTableSketchBenchMark {
         tEnv.getConfig().getConfiguration().setString(
                 ExecutionConfigOptions.TABLE_EXEC_SHUFFLE_MODE, ShuffleMode.BATCH.toString()
         );
+        tEnv.getConfig().getConfiguration().setBoolean(
+                OptimizerConfigOptions.TABLE_OPTIMIZER_DISTINCT_AGG_SPLIT_ENABLED, true
+        );
 
         setUpTables(tEnv, dataPath);
         return tEnv;
