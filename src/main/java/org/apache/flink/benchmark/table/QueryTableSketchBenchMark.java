@@ -109,18 +109,17 @@ public class QueryTableSketchBenchMark {
     }
 
     private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
-        String queryString = fileToString(new File("src/main/resources/table/queries/" + queryName));
+        InputStream inStream =
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream("table/queries/" + queryName));
+        String queryString = fileToString(inStream);
         TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
         benchMark.run(bestArray);
     }
 
-    private static String fileToString(File file) {
-
-        FileInputStream inStream = null;
+    private static String fileToString(InputStream inStream) {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         try {
-            inStream = new FileInputStream(file);
             int str;
             while ((str = inStream.read()) != -1) {
                 outStream.write(str);
