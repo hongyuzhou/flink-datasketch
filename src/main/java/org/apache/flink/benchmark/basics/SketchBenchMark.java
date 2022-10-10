@@ -45,9 +45,7 @@ public class SketchBenchMark {
         KeyedStream<Tuple3<String, Long, String>, String> keyed = source
                 .keyBy(value -> value.f0);
 
-        SketchKeyedStream<Tuple3<String, Long, String>, String> sketchKeyedStream
-                = new SketchKeyedStream<>(keyed, env.getConfig());
-
+        SketchKeyedStream<Tuple3<String, Long, String>, String> sketchKeyedStream = new SketchKeyedStream<>(keyed);
 
         DataStream<Double> estimate;
         if ("cpc".equals(params.get("sketch", "hll"))) {

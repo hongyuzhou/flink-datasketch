@@ -15,35 +15,32 @@ public class SketchKeyedStream<T, KEY> {
 
     private final KeyedStream<T, KEY> inner;
 
-    private final ExecutionConfig config;
-
-    public SketchKeyedStream(KeyedStream<T, KEY> inner, ExecutionConfig config) {
+    public SketchKeyedStream(KeyedStream<T, KEY> inner) {
         this.inner = inner;
-        this.config = config;
     }
 
     @PublicEvolving
     public SingleOutputStreamOperator<Double> hll(int positionToSum) {
         return inner.process(new HllAccumulator<>(
-                positionToSum, inner.getType(), config));
+                positionToSum, inner.getType(), inner.getExecutionConfig()));
     }
 
     @PublicEvolving
     public SingleOutputStreamOperator<Double> hll(int positionToSum, int lgConfigK, TgtHllType tgtHllType, boolean selfTypeSerializer) {
         return inner.process(new HllAccumulator<>(
-                positionToSum, inner.getType(), config, lgConfigK, tgtHllType, selfTypeSerializer));
+                positionToSum, inner.getType(), inner.getExecutionConfig(), lgConfigK, tgtHllType, selfTypeSerializer));
     }
 
     @PublicEvolving
     public SingleOutputStreamOperator<Double> cpc(int positionToSum) {
         return inner.process(new CpcAccumulator<>(
-                positionToSum, inner.getType(), config));
+                positionToSum, inner.getType(), inner.getExecutionConfig()));
     }
 
     @PublicEvolving
     public SingleOutputStreamOperator<Double> cpc(int positionToSum, int lgk, long seed) {
         return inner.process(new CpcAccumulator<>(
-                positionToSum, inner.getType(), config, lgk, seed));
+                positionToSum, inner.getType(), inner.getExecutionConfig(), lgk, seed));
     }
 
     @PublicEvolving
