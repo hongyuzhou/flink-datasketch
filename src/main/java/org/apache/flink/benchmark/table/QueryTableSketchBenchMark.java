@@ -2,8 +2,7 @@ package org.apache.flink.benchmark.table;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.benchmark.table.udaf.CpcUDAF;
-import org.apache.flink.benchmark.table.udaf.HllUDAF;
+import org.apache.flink.benchmark.table.udaf.*;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
@@ -35,8 +34,13 @@ public class QueryTableSketchBenchMark {
         TableEnvironment tEnv = setUpEnv(dataPath);
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+        String sqlIdx = params.get("sqlIdx", "-1");
+        if ("-1".equals(sqlIdx)) {
+            for (int i = 0; i < 15; i++) {
+                runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+            }
+        } else {
+            runQuery(tEnv, "query" + sqlIdx + ".sql", loopNum, bestArray);
         }
 
     }
@@ -100,6 +104,8 @@ public class QueryTableSketchBenchMark {
         //tEnv.executeSql("select * from store_sales limit 10").print();
         tEnv.createTemporarySystemFunction("hll", new HllUDAF());
         tEnv.createTemporarySystemFunction("cpc", new CpcUDAF());
+        tEnv.createTemporarySystemFunction("hll_merge", new HllMergeableUDAF());
+        tEnv.createTemporarySystemFunction("cpc_merge", new CpcMergeableUDAF());
     }
 
     private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
