@@ -49,7 +49,7 @@ public class TableSketchBenchMark {
         LOG.info(" begin optimize.");
 
         tEnv.getConfig().setLocalTimeZone(ZoneId.of("UTC"));
-        tEnv.getConfig().getConfiguration().setString(PipelineOptions.NAME, name + "-" + loop + "/" + loopNum);
+        tEnv.getConfig().getConfiguration().setString(PipelineOptions.NAME, name + "-" + (loop + 1) + "/" + loopNum);
 
         Table table = tEnv.sqlQuery(sqlQuery);
 
