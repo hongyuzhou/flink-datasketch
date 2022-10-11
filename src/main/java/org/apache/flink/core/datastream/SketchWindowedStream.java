@@ -9,6 +9,7 @@ import org.apache.flink.core.function.aggregate.distinct.impl.CpcAccumulator;
 import org.apache.flink.core.function.aggregate.distinct.impl.HllAccumulator;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 
 @Public
@@ -51,5 +52,18 @@ public class SketchWindowedStream<T, K, W extends Window> {
     public <ACC, R> SingleOutputStreamOperator<R> aggregate(AggregateFunction<T, ACC, R> function) {
         return inner.aggregate(function);
     }
+
+    @PublicEvolving
+    public <ACC, V, R> SingleOutputStreamOperator<R> aggregate(
+            AggregateFunction<T, ACC, V> aggFunction,
+            ProcessWindowFunction<V, R, K, W> windowFunction) {
+        return inner.aggregate(aggFunction, windowFunction);
+    }
+
+    @PublicEvolving
+    public <R> SingleOutputStreamOperator<R> process(ProcessWindowFunction<T, R, K, W> function) {
+        return inner.process(function);
+    }
+
 
 }

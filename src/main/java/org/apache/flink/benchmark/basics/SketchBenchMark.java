@@ -8,6 +8,7 @@ import org.apache.flink.benchmark.operator.process.CpcKeyedProcess;
 import org.apache.flink.benchmark.operator.process.HllKeyedProcess;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.datastream.SketchKeyedStream;
+import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -47,7 +48,7 @@ public class SketchBenchMark {
 
         SketchKeyedStream<Tuple3<String, Long, String>, String> sketchKeyedStream = new SketchKeyedStream<>(keyed);
 
-        DataStream<Double> estimate;
+        DataStream<SketchRecord<Tuple3<String, Long, String>>> estimate;
         if ("cpc".equals(params.get("sketch", "hll"))) {
             estimate = sketchKeyedStream
                     .cpc(2).name("cpc");

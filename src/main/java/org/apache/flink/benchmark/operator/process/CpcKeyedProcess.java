@@ -4,9 +4,10 @@ import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.function.process.distinct.CpcKeyedProcessFunction;
+import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.util.Collector;
 
-public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<String, Long, String>, Double> {
+public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<String, Long, String>, SketchRecord<Tuple3<String, Long, String>>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +25,7 @@ public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<Stri
     }
 
     @Override
-    public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<Double> out) throws Exception {
+    public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<SketchRecord<Tuple3<String, Long, String>>> out) throws Exception {
         CpcSketch sketch = cpc.value();
 
         if (sketch == null) {
@@ -35,6 +36,6 @@ public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<Stri
         pvCountInc();
         cpc.update(sketch);
 
-        out.collect(sketch.getEstimate());
+        out.collect(new SketchRecord<>(value, sketch.getEstimate()));
     }
 }

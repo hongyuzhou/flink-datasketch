@@ -10,7 +10,7 @@ import org.apache.flink.streaming.util.typeutils.FieldAccessor;
 import org.apache.flink.streaming.util.typeutils.FieldAccessorFactory;
 import org.apache.flink.util.Collector;
 
-public class CpcAccumulator<K, IN> extends CpcKeyedProcessFunction<K, IN, Double> {
+public class CpcAccumulator<K, IN> extends CpcKeyedProcessFunction<K, IN, SketchRecord<IN>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class CpcAccumulator<K, IN> extends CpcKeyedProcessFunction<K, IN, Double
 
 
     @Override
-    public void processElement(IN value, Context ctx, Collector<Double> out) throws Exception {
+    public void processElement(IN value, Context ctx, Collector<SketchRecord<IN>> out) throws Exception {
         CpcSketch sketch = cpc.value();
 
         if (sketch == null) {
@@ -48,6 +48,6 @@ public class CpcAccumulator<K, IN> extends CpcKeyedProcessFunction<K, IN, Double
         pvCountInc();
         cpc.update(sketch);
 
-        out.collect(sketch.getEstimate());
+        out.collect(new SketchRecord<>(value, sketch.getEstimate()));
     }
 }

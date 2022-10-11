@@ -11,7 +11,7 @@ import org.apache.flink.streaming.util.typeutils.FieldAccessor;
 import org.apache.flink.streaming.util.typeutils.FieldAccessorFactory;
 import org.apache.flink.util.Collector;
 
-public class HllAccumulator<K, IN> extends HllKeyedProcessFunction<K, IN, Double> {
+public class HllAccumulator<K, IN> extends HllKeyedProcessFunction<K, IN, SketchRecord<IN>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class HllAccumulator<K, IN> extends HllKeyedProcessFunction<K, IN, Double
 
 
     @Override
-    public void processElement(IN value, Context ctx, Collector<Double> out) throws Exception {
+    public void processElement(IN value, Context ctx, Collector<SketchRecord<IN>> out) throws Exception {
         HllSketch sketch = hll.value();
 
         if (sketch == null) {
@@ -50,6 +50,6 @@ public class HllAccumulator<K, IN> extends HllKeyedProcessFunction<K, IN, Double
         pvCountInc();
         hll.update(sketch);
 
-        out.collect(sketch.getEstimate());
+        out.collect(new SketchRecord<>(value, sketch.getEstimate()));
     }
 }

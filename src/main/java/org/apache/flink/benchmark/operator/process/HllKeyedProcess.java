@@ -5,9 +5,10 @@ import org.apache.datasketches.hll.TgtHllType;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.function.process.distinct.HllKeyedProcessFunction;
+import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.util.Collector;
 
-public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<String, Long, String>, Double> {
+public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<String, Long, String>, SketchRecord<Tuple3<String, Long, String>>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +26,7 @@ public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<Stri
     }
 
     @Override
-    public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<Double> out) throws Exception {
+    public void processElement(Tuple3<String, Long, String> value, Context ctx, Collector<SketchRecord<Tuple3<String, Long, String>>> out) throws Exception {
         HllSketch sketch = hll.value();
 
         if (sketch == null) {
@@ -36,6 +37,6 @@ public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<Stri
         pvCountInc();
         hll.update(sketch);
 
-        out.collect(sketch.getEstimate());
+        out.collect(new SketchRecord<>(value, sketch.getEstimate()));
     }
 }
