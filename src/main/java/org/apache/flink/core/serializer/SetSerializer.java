@@ -116,9 +116,13 @@ public class SetSerializer<K> extends TypeSerializer<Set<K>> {
         return new SetSerializerSnapshot<>(this);
     }
 
-    public final class SetSerializerSnapshot<KEY> extends CompositeTypeSerializerSnapshot<Set<KEY>, SetSerializer<KEY>> {
+    public final static class SetSerializerSnapshot<KEY> extends CompositeTypeSerializerSnapshot<Set<KEY>, SetSerializer<KEY>> {
 
         private static final int CURRENT_VERSION = 1;
+
+        public SetSerializerSnapshot() {
+            super(SetSerializer.class);
+        }
 
         public SetSerializerSnapshot(SetSerializer<KEY> kSetSerializer) {
             super(kSetSerializer);

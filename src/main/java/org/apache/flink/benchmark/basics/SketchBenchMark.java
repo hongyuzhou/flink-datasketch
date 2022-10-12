@@ -31,6 +31,7 @@ public class SketchBenchMark {
 
         env.setParallelism(4);
         env.enableCheckpointing(5000, CheckpointingMode.EXACTLY_ONCE);
+        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
 
         long rowsPerSecond = Long.parseLong(params.get("rowsPerSecond", "25000"));
         long numberOfRows = Long.parseLong(params.get("numberOfRows", "1000000000"));
@@ -59,6 +60,6 @@ public class SketchBenchMark {
                     //.process(new HllKeyedProcess()).name("hll");
         }
         estimate.print();
-        env.execute();
+        env.execute("SketchBenchMark");
     }
 }

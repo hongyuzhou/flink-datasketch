@@ -64,6 +64,6 @@ public class AllWindowSketchBenchMark {
                     .aggregate(new HllAggregate()).name("hll");
         }
         estimate.print();
-        env.execute();
+        env.execute("AllWindowSketchBenchMark");
     }
 }

@@ -34,6 +34,7 @@ public class WithoutSketchBenchMark {
 
         env.setParallelism(4);
         env.enableCheckpointing(5000, CheckpointingMode.EXACTLY_ONCE);
+        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
 
         long rowsPerSecond = Long.parseLong(params.get("rowsPerSecond", "25000"));
         long numberOfRows = Long.parseLong(params.get("numberOfRows", "1000000000"));
@@ -51,7 +52,7 @@ public class WithoutSketchBenchMark {
                 .process(new CountDistinctProcessFunction());
 
         estimate.print();
-        env.execute();
+        env.execute("WithoutSketchBenchMark");
     }
 
     private static class CountDistinctProcessFunction extends KeyedProcessFunction<String, Tuple3<String, Long, String>, Record<Tuple3<String, Long, String>>> {
