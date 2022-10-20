@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A serializer for {@link Set}. The serializer relies on a key serializer
+ *
+ * @param <K> The type of the keys in the Set.
+ */
 public class SetSerializer<K> extends TypeSerializer<Set<K>> {
 
     private final TypeSerializer<K> keySerializer;
@@ -43,7 +48,7 @@ public class SetSerializer<K> extends TypeSerializer<Set<K>> {
     @Override
     public Set<K> copy(Set<K> from) {
         Set<K> newSet = new HashSet<>();
-        for (K k: from) {
+        for (K k : from) {
             K newKey = keySerializer.copy(k);
             newSet.add(newKey);
         }
@@ -135,7 +140,7 @@ public class SetSerializer<K> extends TypeSerializer<Set<K>> {
 
         @Override
         protected TypeSerializer<?>[] getNestedSerializers(SetSerializer<KEY> outerSerializer) {
-            return new TypeSerializer<?>[] {outerSerializer.getKeySerializer()};
+            return new TypeSerializer<?>[]{outerSerializer.getKeySerializer()};
         }
 
         @Override

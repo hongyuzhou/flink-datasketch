@@ -4,7 +4,9 @@ import org.apache.datasketches.hll.TgtHllType;
 import org.apache.datasketches.hll.Union;
 import org.apache.flink.core.function.table.distinct.HllMergeableUDAFunction;
 
-
+/**
+ * Implementation of HllMergeableUDAFunction
+ */
 public class HllMergeableUDAF extends HllMergeableUDAFunction<Double> {
 
     private static final long serialVersionUID = 1L;

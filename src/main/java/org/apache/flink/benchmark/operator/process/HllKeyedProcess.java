@@ -8,6 +8,9 @@ import org.apache.flink.core.function.process.distinct.HllKeyedProcessFunction;
 import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.util.Collector;
 
+/**
+ * Implementation of HllKeyedProcessFunction
+ */
 public class HllKeyedProcess extends HllKeyedProcessFunction<String, Tuple3<String, Long, String>, SketchRecord<Tuple3<String, Long, String>>> {
 
     private static final long serialVersionUID = 1L;

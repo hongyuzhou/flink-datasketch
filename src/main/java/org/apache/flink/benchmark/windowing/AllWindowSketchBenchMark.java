@@ -20,6 +20,9 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * DataStream API (AllWindowedStream) Benchmark For Sketch
+ */
 public class AllWindowSketchBenchMark {
 
     private static final Logger LOG = LoggerFactory.getLogger(AllWindowSketchBenchMark.class);

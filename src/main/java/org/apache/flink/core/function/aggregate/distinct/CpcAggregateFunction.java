@@ -8,6 +8,11 @@ import org.apache.flink.core.function.aggregate.SketchAggregateFunction;
 import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
 import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
 
+/**
+ * Use CpcSketch {@link CpcSketch} For CpcAggregateFunction
+ * @param <IN>  The type of the values that are aggregated (input values)
+ * @param <OUT> The type of the aggregated result
+ */
 public abstract class CpcAggregateFunction<IN, OUT> extends SketchAggregateFunction<IN, CpcSketch, OUT> {
 
     private static final long serialVersionUID = 1L;

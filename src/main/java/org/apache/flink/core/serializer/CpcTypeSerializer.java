@@ -4,6 +4,10 @@ import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 
+/**
+ * A serializer for {@link CpcSketch}
+ * CpcTypeSerializer Depended on KryoSerializer
+ */
 public class CpcTypeSerializer extends KryoSerializer<CpcSketch> {
 
     private static final long serialVersionUID = 1L;

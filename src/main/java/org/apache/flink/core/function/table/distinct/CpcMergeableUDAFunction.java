@@ -11,6 +11,12 @@ import org.apache.flink.table.functions.FunctionContext;
 import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
 import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
 
+/**
+ * Use CpcSketch {@link CpcSketch} As Accumulator For CpcMergeableUDAFunction
+ * Support Merge
+ *
+ * @param <T> final result type of the aggregation
+ */
 @FunctionHint(
         accumulator = @DataTypeHint(value = "RAW", bridgedTo = CpcMergeableUDAFunction.CpcTableAcc.class)
 )

@@ -1,9 +1,12 @@
 package org.apache.flink.benchmark.table.udaf;
 
 import org.apache.datasketches.cpc.CpcSketch;
+import org.apache.datasketches.hll.HllSketch;
 import org.apache.flink.core.function.table.distinct.CpcUDAFunction;
 
-
+/**
+ * Implementation of CpcUDAFunction
+ */
 public class CpcUDAF extends CpcUDAFunction<Double> {
 
     private static final long serialVersionUID = 1L;

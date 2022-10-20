@@ -12,6 +12,13 @@ import org.apache.flink.core.function.process.SketchKeyedProcessFunction;
 
 import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
 
+/**
+ * Use HllSketch {@link HllSketch} For HllKeyedProcessFunction
+ *
+ * @param <K> Type of the key.
+ * @param <I> Type of the input elements.
+ * @param <O> Type of the output elements.
+ */
 public abstract class HllKeyedProcessFunction<K, I, O> extends SketchKeyedProcessFunction<K, I, O> {
 
     private static final long serialVersionUID = 1L;

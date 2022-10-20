@@ -5,13 +5,18 @@ import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.TgtHllType;
 import org.apache.datasketches.hll.Union;
 import org.apache.flink.core.function.table.SketchUDAFunction;
-import org.apache.flink.core.serializer.HllTypeSerializer;
 import org.apache.flink.table.annotation.DataTypeHint;
 import org.apache.flink.table.annotation.FunctionHint;
 import org.apache.flink.table.functions.FunctionContext;
 
 import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
 
+/**
+ * Use HllSketch {@link HllSketch} As Accumulator For HllMergeableUDAFunction
+ * Support Merge
+ *
+ * @param <T> final result type of the aggregation
+ */
 @FunctionHint(
         accumulator = @DataTypeHint(value = "RAW", bridgedTo = Union.class)
 )

@@ -17,6 +17,9 @@ import org.apache.flink.streaming.api.functions.source.datagen.DataGeneratorSour
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * DataStream API (KeyedStream) Benchmark For Sketch
+ */
 public class SketchBenchMark {
 
     private static final Logger LOG = LoggerFactory.getLogger(SketchBenchMark.class);

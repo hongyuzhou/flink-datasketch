@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Random generator Tuple3 Test Data
  * <city, event_time, value>
  */
 public class Tuple3SourceGenerator extends RandomGenerator<Tuple3<String, Long, String>> {

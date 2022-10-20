@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DataStream API (KeyedStream) Benchmark Without Sketch
+ */
 public class WithoutSketchBenchMark {
 
     private static final Logger LOG = LoggerFactory.getLogger(WithoutSketchBenchMark.class);
@@ -55,6 +58,9 @@ public class WithoutSketchBenchMark {
         env.execute("WithoutSketchBenchMark");
     }
 
+    /**
+     * Use Set to Complete Deduplication
+     */
     private static class CountDistinctProcessFunction extends KeyedProcessFunction<String, Tuple3<String, Long, String>, Record<Tuple3<String, Long, String>>> {
 
         private ValueState<Set<String>> distinct;

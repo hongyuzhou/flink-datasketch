@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.Set;
 
+/**
+ * Implementation of SketchAggregateFunction
+ */
 public class HllAggregate extends SketchAggregateFunction<Tuple3<String, Long, String>, Tuple3<HllSketch, Long, Set<String>>, Double> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HllAggregate.class);

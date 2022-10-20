@@ -11,6 +11,11 @@ import org.apache.flink.table.functions.FunctionContext;
 
 import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
 
+/**
+ * Use HllSketch {@link HllSketch} As Accumulator For HllUDAFunction
+ *
+ * @param <T> final result type of the aggregation
+ */
 @FunctionHint(
         accumulator = @DataTypeHint(value = "RAW", bridgedTo = HllSketch.class, rawSerializer = HllTypeSerializer.class)
 )

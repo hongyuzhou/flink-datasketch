@@ -7,6 +7,9 @@ import org.apache.flink.core.function.process.distinct.CpcKeyedProcessFunction;
 import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.util.Collector;
 
+/**
+ * Implementation of CpcKeyedProcessFunction
+ */
 public class CpcKeyedProcess extends CpcKeyedProcessFunction<String, Tuple3<String, Long, String>, SketchRecord<Tuple3<String, Long, String>>> {
 
     private static final long serialVersionUID = 1L;

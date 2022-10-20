@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Benchmark For Table/SQL
+ */
 public class QueryTableSketchBenchMark {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryTableSketchBenchMark.class);

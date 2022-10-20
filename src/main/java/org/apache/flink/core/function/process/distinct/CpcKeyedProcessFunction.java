@@ -11,6 +11,12 @@ import org.apache.flink.core.serializer.CpcTypeSerializer;
 import static org.apache.datasketches.Util.DEFAULT_UPDATE_SEED;
 import static org.apache.datasketches.cpc.CpcSketch.DEFAULT_LG_K;
 
+/**
+ * Use CpcSketch {@link CpcSketch} For CpcKeyedProcessFunction
+ * @param <K> Type of the key.
+ * @param <I> Type of the input elements.
+ * @param <O> Type of the output elements.
+ */
 public abstract class CpcKeyedProcessFunction<K, I, O> extends SketchKeyedProcessFunction<K, I, O> {
 
     private static final long serialVersionUID = 1L;

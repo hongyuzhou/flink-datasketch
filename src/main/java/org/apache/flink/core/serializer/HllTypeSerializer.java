@@ -9,6 +9,10 @@ import org.apache.flink.core.memory.DataOutputView;
 
 import java.io.IOException;
 
+/**
+ * A serializer for {@link HllSketch}
+ * HllTypeSerializer
+ */
 public class HllTypeSerializer extends TypeSerializerSingleton<HllSketch> {
 
     private static final long serialVersionUID = 1L;
@@ -87,7 +91,6 @@ public class HllTypeSerializer extends TypeSerializerSingleton<HllSketch> {
             super(() -> HllTypeSerializer.INSTANCE);
         }
     }
-
 
 
 }

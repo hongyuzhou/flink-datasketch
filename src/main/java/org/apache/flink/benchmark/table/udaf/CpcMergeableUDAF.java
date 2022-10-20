@@ -2,7 +2,9 @@ package org.apache.flink.benchmark.table.udaf;
 
 import org.apache.flink.core.function.table.distinct.CpcMergeableUDAFunction;
 
-
+/**
+ * Implementation of CpcMergeableUDAFunction
+ */
 public class CpcMergeableUDAF extends CpcMergeableUDAFunction<Double> {
 
     private static final long serialVersionUID = 1L;

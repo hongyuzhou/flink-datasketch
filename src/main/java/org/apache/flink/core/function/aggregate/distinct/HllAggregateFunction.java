@@ -8,6 +8,12 @@ import org.apache.flink.core.function.aggregate.SketchAggregateFunction;
 
 import static org.apache.datasketches.hll.HllSketch.DEFAULT_LG_K;
 
+/**
+ * Use HllSketch {@link HllSketch} For HllAggregateFunction
+ *
+ * @param <IN>  The type of the values that are aggregated (input values)
+ * @param <OUT> The type of the aggregated result
+ */
 public abstract class HllAggregateFunction<IN, OUT> extends SketchAggregateFunction<IN, HllSketch, OUT> {
 
     private static final long serialVersionUID = 1L;
