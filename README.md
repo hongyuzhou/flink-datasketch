@@ -1,5 +1,9 @@
 # Flink-Datasketches
 ## Apache-Flink &amp; Apache-Datasketches
+0. Maven
+
+`mvn clean package`
+
 
 1. Stream API Benchmark 执行
 
