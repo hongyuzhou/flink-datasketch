@@ -1,7 +1,7 @@
 # Flink-Datasketches
 ## Apache-Flink &amp; Apache-Datasketches
 
-### Flink基于[Apache DataSketces](https://datasketches.apache.org) 快速计算不可扩展（don’t scale）的非累加指标解决方案
+### Flink基于[Apache DataSketches](https://datasketches.apache.org) 快速计算不可扩展（don’t scale）的非累加指标解决方案
 
 #### Abstract
 开源组件Apache DataSketches在不可扩展（don’t scale）的非累加指标计算中有非常优秀表现，基于此考虑将其结合到Flink的实际应用中。在大数量集实际生产中，实现更快，更少的计算资源消耗，获得业务可以接受的计算结果。
