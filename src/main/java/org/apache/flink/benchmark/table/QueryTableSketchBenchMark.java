@@ -35,16 +35,18 @@ public class QueryTableSketchBenchMark {
 
         int loopNum = params.getInt("loopNum", 3);
 
+        String queryType = params.get("queryType", "distinct");
+
         TableEnvironment tEnv = setUpEnv(dataPath);
 
         List<Tuple2<String, Long>> bestArray = new ArrayList<>();
         String sqlIdx = params.get("sqlIdx", "-1");
         if ("-1".equals(sqlIdx)) {
             for (int i = 0; i < 15; i++) {
-                runQuery(tEnv, "query" + i + ".sql", loopNum, bestArray);
+                runQuery(tEnv, queryType, "query" + i + ".sql", loopNum, bestArray);
             }
         } else {
-            runQuery(tEnv, "query" + sqlIdx + ".sql", loopNum, bestArray);
+            runQuery(tEnv, queryType, "query" + sqlIdx + ".sql", loopNum, bestArray);
         }
 
     }
@@ -116,9 +118,9 @@ public class QueryTableSketchBenchMark {
         tEnv.createTemporarySystemFunction("frequencies_items", new FreqItemsUDAF(64, 10));
     }
 
-    private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
+    private static void runQuery(TableEnvironment tEnv, String queryType, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
         InputStream inStream =
-                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream("table/queries/frequencies/" + queryName));
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream(String.format("table/queries/%s/%s", queryType, queryName)));
         String queryString = fileToString(inStream);
         TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
         benchMark.run(bestArray);
