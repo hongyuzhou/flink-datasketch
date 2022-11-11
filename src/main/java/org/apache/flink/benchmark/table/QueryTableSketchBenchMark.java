@@ -3,6 +3,7 @@ package org.apache.flink.benchmark.table;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.benchmark.table.udaf.*;
+import org.apache.flink.benchmark.table.udaf.FreqItemsUDAF;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
@@ -112,11 +113,12 @@ public class QueryTableSketchBenchMark {
         tEnv.createTemporarySystemFunction("cpc", new CpcUDAF());
         tEnv.createTemporarySystemFunction("hll_merge", new HllMergeableUDAF());
         tEnv.createTemporarySystemFunction("cpc_merge", new CpcMergeableUDAF());
+        tEnv.createTemporarySystemFunction("frequencies_items", new FreqItemsUDAF(64, 10));
     }
 
     private static void runQuery(TableEnvironment tEnv, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
         InputStream inStream =
-                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream("table/queries/" + queryName));
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream("table/queries/frequencies/" + queryName));
         String queryString = fileToString(inStream);
         TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
         benchMark.run(bestArray);
