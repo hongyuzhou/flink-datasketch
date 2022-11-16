@@ -1,12 +1,9 @@
-package org.apache.flink.benchmark.basics;
+package org.apache.flink.benchmark.stream;
 
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.benchmark.data.Tuple3SourceGenerator;
-import org.apache.flink.benchmark.operator.process.CpcKeyedProcess;
-import org.apache.flink.benchmark.operator.process.HllKeyedProcess;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.datastream.SketchKeyedStream;
 import org.apache.flink.core.function.process.distinct.impl.SketchRecord;
 import org.apache.flink.streaming.api.CheckpointingMode;

@@ -1,4 +1,4 @@
-package org.apache.flink.benchmark.basics;
+package org.apache.flink.benchmark.stream;
 
 import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.TypeHint;

@@ -2,6 +2,7 @@ package org.apache.flink.benchmark.table;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.benchmark.table.asserts.TableAccuracyAssert;
 import org.apache.flink.benchmark.table.udaf.*;
 import org.apache.flink.benchmark.table.udaf.FreqItemsUDAF;
 import org.apache.flink.streaming.api.transformations.ShuffleMode;
@@ -39,18 +40,24 @@ public class QueryTableSketchBenchMark {
 
         TableEnvironment tEnv = setUpEnv(dataPath);
 
-        List<Tuple2<String, Long>> bestArray = new ArrayList<>();
-        String sqlIdx = params.get("sqlIdx", "-1");
-        if ("-1".equals(sqlIdx)) {
-            for (int i = 0; i < 15; i++) {
-                runQuery(tEnv, queryType, "query" + i + ".sql", loopNum, bestArray);
-            }
+        boolean isAccuracyAssert = params.getBoolean("isAccuracyAssert", false);
+
+        if (!isAccuracyAssert) {
+            timeExecBenchMark(params, tEnv, queryType, loopNum);
         } else {
-            runQuery(tEnv, queryType, "query" + sqlIdx + ".sql", loopNum, bestArray);
+            accuracyQueryBenchMark(params, tEnv, queryType, loopNum);
         }
 
     }
 
+    /* common function */
+
+    /**
+     * set up table environment
+     *
+     * @param dataPath
+     * @return
+     */
     private static TableEnvironment setUpEnv(String dataPath) {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inBatchMode().build();
         TableEnvironment tEnv = TableEnvironment.create(settings);
@@ -74,6 +81,12 @@ public class QueryTableSketchBenchMark {
         return tEnv;
     }
 
+    /**
+     * set up table
+     *
+     * @param tEnv
+     * @param dataPath
+     */
     private static void setUpTables(TableEnvironment tEnv, String dataPath) {
         String ddl = "" +
                 "CREATE TEMPORARY TABLE store_sales (" +
@@ -118,14 +131,12 @@ public class QueryTableSketchBenchMark {
         tEnv.createTemporarySystemFunction("frequencies_items", new FreqItemsUDAF(64, 10));
     }
 
-    private static void runQuery(TableEnvironment tEnv, String queryType, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
-        InputStream inStream =
-                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream(String.format("table/queries/%s/%s", queryType, queryName)));
-        String queryString = fileToString(inStream);
-        TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
-        benchMark.run(bestArray);
-    }
-
+    /**
+     * read sql from file
+     *
+     * @param inStream
+     * @return
+     */
     private static String fileToString(InputStream inStream) {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
@@ -151,5 +162,99 @@ public class QueryTableSketchBenchMark {
             LOG.error("SQL to String Error", e);
         }
         return "";
+    }
+
+    /* Time Benchmark */
+
+    /**
+     * Exec Time Benchmark
+     *
+     * @param params
+     * @param tEnv
+     * @param queryType
+     * @param loopNum
+     * @throws Exception
+     */
+    private static void timeExecBenchMark(ParameterTool params, TableEnvironment tEnv, String queryType, int loopNum) throws Exception {
+        List<Tuple2<String, Long>> bestArray = new ArrayList<>();
+
+        String sqlIdx = params.get("sqlIdx", "-1");
+        if ("-1".equals(sqlIdx)) {
+            for (int i = 0; i < 15; i++) {
+                runQuery(tEnv, queryType, "query" + i + ".sql", loopNum, bestArray);
+            }
+        } else {
+            runQuery(tEnv, queryType, "query" + sqlIdx + ".sql", loopNum, bestArray);
+        }
+    }
+
+    /**
+     * Exec Time Benchmark Query
+     *
+     * @param tEnv
+     * @param queryType
+     * @param queryName
+     * @param loopNum
+     * @param bestArray
+     * @throws Exception
+     */
+    private static void runQuery(TableEnvironment tEnv, String queryType, String queryName, int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
+        InputStream inStream =
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream(String.format("table/queries/%s/%s", queryType, queryName)));
+        String queryString = fileToString(inStream);
+        TableSketchBenchMark benchMark = new TableSketchBenchMark(queryName, queryString, loopNum, tEnv);
+        benchMark.run(bestArray);
+    }
+
+    /* Accuracy Benchmark */
+
+    /**
+     * Exec Accuracy Benchmark
+     *
+     * @param params
+     * @param tEnv
+     * @param queryType
+     * @param loopNum
+     * @throws Exception
+     */
+    private static void accuracyQueryBenchMark(ParameterTool params, TableEnvironment tEnv,
+                                               String queryType, int loopNum) throws Exception {
+        List<Tuple2<String, Long>> bestArray = new ArrayList<>();
+
+        String expectedSqlIdx = params.get("expectedSqlIdx", "0");
+        String actualSqlIdx = params.get("actualSqlIdx", "1");
+        String queryName = params.get("queryName", "AccuracyQuery");
+
+        runAccuracyQuery(tEnv, queryType, queryName,
+                "query" + expectedSqlIdx + ".sql", "query" + actualSqlIdx + ".sql",
+                loopNum, bestArray);
+    }
+
+    /**
+     * Exec Accuracy Benchmark Query
+     *
+     * @param tEnv
+     * @param queryType
+     * @param queryName
+     * @param expectedQuery
+     * @param actualQuery
+     * @param loopNum
+     * @param bestArray
+     * @throws Exception
+     */
+    private static void runAccuracyQuery(TableEnvironment tEnv,
+                                         String queryType, String queryName,
+                                         String expectedQuery, String actualQuery,
+                                         int loopNum, List<Tuple2<String, Long>> bestArray) throws Exception {
+        InputStream expectedInStream =
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream(String.format("table/queries/%s/%s", queryType, expectedQuery)));
+        String expectQueryString = fileToString(expectedInStream);
+
+        InputStream actualInStream =
+                Objects.requireNonNull(QueryTableSketchBenchMark.class.getClassLoader().getResourceAsStream(String.format("table/queries/%s/%s", queryType, actualQuery)));
+        String actualQueryString = fileToString(actualInStream);
+
+        TableAccuracyAssert accuracyAssert = new TableAccuracyAssert(queryName, expectQueryString, actualQueryString, loopNum, tEnv);
+        accuracyAssert.run(bestArray);
     }
 }

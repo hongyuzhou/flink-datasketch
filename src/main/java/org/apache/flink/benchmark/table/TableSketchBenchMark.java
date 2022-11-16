@@ -74,7 +74,7 @@ public class TableSketchBenchMark {
         Tuple3<Long, Long, Long> t3 = getBestAvgMaxTime(results, "getTotalTime");
         printLine(' ', "|", itemMaxLength, " Total", " " + t3.f0, " " + t3.f1, " " + t3.f2);
         printLine('-', "+", itemMaxLength, "", "", "", "");
-        bestArray.add(new Tuple2<String, Long>(name, t3.f0));
+        bestArray.add(new Tuple2<>(name, t3.f0));
         System.err.println();
     }
 
