@@ -15,7 +15,7 @@
 
 ##### 1. Stream API Benchmark 执行
 
-`./bin/flink run -c org.apache.flink.benchmark.basics.WithoutSketchBenchMark ${your_path}/flink-datasketches-1.0-SNAPSHOT.jar`
+`./bin/flink run -c org.apache.flink.benchmark.stream.WithoutSketchBenchMark ${your_path}/flink-datasketches-1.0-SNAPSHOT.jar`
 
 
 ##### 2. Batch SQL Benchmark 执行
