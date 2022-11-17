@@ -1,14 +1,16 @@
-select ss_item_sk
-     , ss_sales_price
+select ss_store_sk
+     , customer_cnt
 from (
-         select ss_item_sk
-              , ss_sales_price
-              , row_number() over(order by ss_sales_price desc) as rn
+         select ss_store_sk
+              , customer_cnt
+              , row_number() over(order by customer_cnt desc) as rn
          from (
-                  select ss_item_sk
-                       , sum(ss_sales_price) as ss_sales_price
+                  select ss_store_sk
+                       , count(distinct ss_customer_sk) as customer_cnt
                   from store_sales
-                  group by ss_item_sk
+                  where ss_store_sk is not null
+                  group by ss_store_sk
               )
      ) t
-where t.rn <= 10
+where t.rn <= 5
+order by t.rn

@@ -128,7 +128,7 @@ public class QueryTableSketchBenchMark {
         tEnv.createTemporarySystemFunction("cpc", new CpcUDAF());
         tEnv.createTemporarySystemFunction("hll_merge", new HllMergeableUDAF());
         tEnv.createTemporarySystemFunction("cpc_merge", new CpcMergeableUDAF());
-        tEnv.createTemporarySystemFunction("frequencies_items", new FreqItemsUDAF(64, 10));
+        tEnv.createTemporarySystemFunction("frequencies_items", new FreqItemsUDAF(64, 5));
     }
 
     /**

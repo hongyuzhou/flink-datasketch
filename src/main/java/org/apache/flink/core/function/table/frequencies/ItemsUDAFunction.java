@@ -41,4 +41,11 @@ public abstract class ItemsUDAFunction<T, IT> extends SketchUDAFunction<T, Items
     public void resetAccumulator(ItemsSketch<IT> acc) {
         acc.reset();
     }
+
+
+    public void merge(ItemsSketch<IT> acc, Iterable<ItemsSketch<IT>> it) {
+        for (ItemsSketch<IT> itemsSketch : it) {
+            acc.merge(itemsSketch);
+        }
+    }
 }

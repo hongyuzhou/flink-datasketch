@@ -39,8 +39,8 @@ public class WithoutSketchBenchMark {
         env.enableCheckpointing(5000, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
 
-        long rowsPerSecond = Long.parseLong(params.get("rowsPerSecond", "25000"));
-        long numberOfRows = Long.parseLong(params.get("numberOfRows", "1000000000"));
+        long rowsPerSecond = params.getLong("rowsPerSecond", 25000);
+        long numberOfRows = params.getLong("numberOfRows", 1000000000);
 
         DataStream<Tuple3<String, Long, String>> source = env
                 .addSource(new DataGeneratorSource<>(

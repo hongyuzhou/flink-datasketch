@@ -3,6 +3,7 @@ package org.apache.flink.benchmark.stream.asserts;
 import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
@@ -11,17 +12,23 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.benchmark.data.ShakespeareDataGenerator;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.core.fs.FileSystem;
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.serializer.CpcTypeSerializer;
 import org.apache.flink.core.serializer.HllTypeSerializer;
 import org.apache.flink.core.serializer.SetSerializer;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
+import org.apache.flink.streaming.api.functions.sink.filesystem.OutputFileConfig;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
+import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
 import org.apache.flink.streaming.api.functions.source.datagen.DataGeneratorSource;
 import org.apache.flink.util.Collector;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class StreamAccuracyAssert {
 
@@ -35,8 +42,8 @@ public class StreamAccuracyAssert {
         env.enableCheckpointing(60000, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
 
-        long rowsPerSecond = Long.parseLong(params.get("rowsPerSecond", "200"));
-        long numberOfRows = Long.parseLong(params.get("numberOfRows", "1000000000"));
+        long rowsPerSecond = params.getLong("rowsPerSecond", 200);
+        long numberOfRows = params.getLong("numberOfRows", Long.MAX_VALUE);
 
         boolean useHll = params.getBoolean("useHll", true);
         env.addSource(new DataGeneratorSource<>(new ShakespeareDataGenerator(), rowsPerSecond, numberOfRows))
@@ -45,7 +52,23 @@ public class StreamAccuracyAssert {
                 .flatMap(new Tokenizer())
                 .keyBy(t -> t.f0)
                 .process(new ShakespeareTokenUv(useHll))
-                .print();
+                .writeAsCsv("accuracy-assert2.csv", FileSystem.WriteMode.OVERWRITE)
+//                .addSink(StreamingFileSink.
+//                        <Tuple3<Long, Integer, Double>>forRowFormat(new Path("accuracy-assert"), new SimpleStringEncoder<>())
+//                        .withRollingPolicy(
+//                                DefaultRollingPolicy.builder()
+//                                        .withRolloverInterval(TimeUnit.MINUTES.toMillis(5))
+//                                        .withInactivityInterval(TimeUnit.MINUTES.toMillis(1))
+//                                        .withMaxPartSize(1024 * 1024 * 1024)
+//                                        .build())
+//                        .withOutputFileConfig(
+//                                OutputFileConfig
+//                                        .builder()
+//                                        .withPartPrefix("error")
+//                                        .withPartSuffix("csv")
+//                                        .build())
+//                        .build())
+        ;
 
         env.execute("StreamAccuracyAssert");
     }
