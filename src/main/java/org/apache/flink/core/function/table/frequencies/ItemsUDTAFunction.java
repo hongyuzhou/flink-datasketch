@@ -2,13 +2,13 @@ package org.apache.flink.core.function.table.frequencies;
 
 import org.apache.datasketches.frequencies.ItemsSketch;
 import org.apache.flink.annotation.Experimental;
-import org.apache.flink.core.function.table.SketchUDAFunction;
+import org.apache.flink.core.function.table.SketchUDTAFunction;
 import org.apache.flink.table.annotation.DataTypeHint;
 import org.apache.flink.table.annotation.FunctionHint;
 import org.apache.flink.table.functions.FunctionContext;
 
 /**
- * Use ItemsSketch {@link ItemsSketch} As Accumulator For ItemsUDAFunction
+ * Use ItemsSketch {@link ItemsSketch} As Accumulator For ItemsUDTAFunction
  *
  * @param <T>  final result type of the aggregation
  * @param <IT> data type of the ItemsSketch
@@ -17,7 +17,7 @@ import org.apache.flink.table.functions.FunctionContext;
 @FunctionHint(
         accumulator = @DataTypeHint(value = "RAW", bridgedTo = ItemsSketch.class)
 )
-public abstract class ItemsUDAFunction<T, IT> extends SketchUDAFunction<T, ItemsSketch<IT>> {
+public abstract class ItemsUDTAFunction<T, IT> extends SketchUDTAFunction<T, ItemsSketch<IT>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public abstract class ItemsUDAFunction<T, IT> extends SketchUDAFunction<T, Items
 
     protected int topK;
 
-    public ItemsUDAFunction(int maxMapSize, int topK) {
+    public ItemsUDTAFunction(int maxMapSize, int topK) {
         this.maxMapSize = maxMapSize;
         this.topK = topK;
     }

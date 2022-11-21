@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ItemsSketchTest {
 
     @Test
-    public void ItemsSketchUseItCase() {
+    public void itemsSketchUseItCase() {
         ItemsSketch<String> sketch = new ItemsSketch<>(64);
         sketch.update("a");
         sketch.update("a");
@@ -29,7 +29,7 @@ public class ItemsSketchTest {
     }
 
     @Test
-    public void ItemsUnionSketchUseItCase() {
+    public void itemsUnionSketchUseItCase() {
         ItemsSketch<String> sketch1 = new ItemsSketch<>(64);
         sketch1.update("a");
         sketch1.update("a");
